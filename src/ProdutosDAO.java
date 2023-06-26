@@ -37,19 +37,25 @@ public class ProdutosDAO {
             stmt.setDouble(2, produto.getValor());
 
             // Executar a instrução SQL para inserir o produto no banco de dados
-            stmt.executeUpdate();
+            int linhasModificadas = stmt.executeUpdate();
+
+            // Verificar se a inserção foi bem-sucedida
+            if (linhasModificadas > 0) {
+                JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Falha ao cadastrar o produto.");
+            }
 
             // Fechar a conexão com o banco de dados
             conn.close();
         } catch (SQLException e) {
-
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar o produto: " + e.getMessage());
         }
-
+        
     }
 
     public ArrayList<ProdutosDTO> listarProdutos() {
 
         return listagem;
     }
-
 }
