@@ -51,11 +51,45 @@ public class ProdutosDAO {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar o produto: " + e.getMessage());
         }
-        
+
     }
 
     public ArrayList<ProdutosDTO> listarProdutos() {
+        try {
+            // Estabelecer conexão com o banco de dados
+            conn = new conectaDAO().connectDB();
+
+            // Preparar a instrução SQL para selecionar os produtos
+            String sql = "SELECT * FROM produtos";
+            prep = conn.prepareStatement(sql);
+
+            // Executar a consulta SQL e obter o resultado
+            resultset = prep.executeQuery();
+
+            // Limpar a lista de produtos
+            listagem.clear();
+
+            // Percorrer o resultado e criar objetos ProdutosDTO para cada linha retornada
+            while (resultset.next()) {
+                int id = resultset.getInt("Id");
+                String nome = resultset.getString("nome");
+                Integer valor = resultset.getInt("valor");
+                String status = resultset.getString("Status");
+
+                // Criar um objeto ProdutosDTO com os dados obtidos
+                ProdutosDTO produto = new ProdutosDTO(id, nome, valor, status);
+
+                // Adicionar o produto à lista
+                listagem.add(produto);
+            }
+
+            // Fechar a conexão com o banco de dados
+            conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar os produtos: " + e.getMessage());
+        }
 
         return listagem;
     }
+
 }
